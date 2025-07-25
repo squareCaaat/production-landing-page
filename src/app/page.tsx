@@ -154,7 +154,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ productInfo, setProductInfo }
                     }
                 }
             };
-            const apiKey = ""; // API 키는 비워둡니다.
+            const apiKey = process.env.GEMINI_API_KEY;
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
             
             const response = await fetch(apiUrl, {
@@ -335,7 +335,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
                 {/* 제목 섹션에 스크롤 애니메이션 적용 */}
                 <AnimatedElement>
                     <div className="text-center">
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">왜 "Velocity"를 선택해야 할까요?</h2>
+                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">왜 &quot;Velocity&quot;를 선택해야 할까요?</h2>
                         <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-400">
                             우리는 복잡한 과정 없이도 최고의 결과물을 만들 수 있어야 한다고 믿습니다.
                         </p>
@@ -384,7 +384,7 @@ const Footer: React.FC = () => {
             <AnimatedElement>
                 <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
                     <p className="text-gray-500">
-                        &copy; {new Date().getFullYear()} Project "Velocity". All rights reserved.
+                        &copy; {new Date().getFullYear()} Project &quot;Velocity&quot;. All rights reserved.
                     </p>
                 </div>
             </AnimatedElement>
