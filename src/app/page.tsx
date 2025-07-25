@@ -289,7 +289,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
                     }
                 }
             };
-            const apiKey = ""; // API 키는 비워둡니다.
+            const apiKey = process.env.GEMINI_API_KEY; // API 키는 비워둡니다.
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
             
             const response = await fetch(apiUrl, {
@@ -344,22 +344,22 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
 
                 {/* 버튼에 스크롤 애니메이션 적용 */}
                 <AnimatedElement delay="transition-delay-200">
-                <div className="text-center my-12">
-                     <button 
-                        onClick={generateFeatures}
-                        disabled={isLoading}
-                        className="bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center mx-auto"
-                    >
-                        {isLoading ? (
-                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        ) : '✨'}
-                        {isLoading ? '핵심 기능 생성 중...' : 'AI로 핵심 기능 3가지 생성하기'}
-                    </button>
-                    {error && <p className="text-red-400 mt-2">{error}</p>}
-                </div>
+                    <div className="text-center my-12">
+                         <button 
+                            onClick={generateFeatures}
+                            disabled={isLoading}
+                            className="bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center mx-auto"
+                        >
+                            {isLoading ? (
+                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            ) : '✨'}
+                            {isLoading ? '핵심 기능 생성 중...' : 'AI로 핵심 기능 3가지 생성하기'}
+                        </button>
+                        {error && <p className="text-red-400 mt-2">{error}</p>}
+                    </div>
                 </AnimatedElement>
 
                 {/* 기능 카드들에 스크롤 애니메이션 적용 */}
@@ -382,11 +382,11 @@ const Footer: React.FC = () => {
     return (
         <footer className="bg-gray-900 border-t border-gray-800">
             <AnimatedElement>
-            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
-                <p className="text-gray-500">
-                    &copy; {new Date().getFullYear()} Project "Velocity". All rights reserved.
-                </p>
-            </div>
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+                    <p className="text-gray-500">
+                        &copy; {new Date().getFullYear()} Project "Velocity". All rights reserved.
+                    </p>
+                </div>
             </AnimatedElement>
         </footer>
     );
