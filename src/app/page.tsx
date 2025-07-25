@@ -53,8 +53,7 @@ interface HeadlineData {
 
 /**
  * ID: FR-4 (스크롤 애니메이션)
- * 설명: Intersection Observer API를 사용하는 커스텀 훅.
- * (기존 코드와 동일)
+ * 설명: Intersection Observer API를 사용하는 커스텀 훅 (globals.css의 scroll-animate 클래스 사용)
  */
 const useIntersectionObserver = (options: IntersectionObserverOptions): [React.RefObject<HTMLDivElement | null>, boolean] => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -84,10 +83,9 @@ const useIntersectionObserver = (options: IntersectionObserverOptions): [React.R
 };
 
 /**
- * 설명: 스크롤 애니메이션을 적용할 요소를 감싸는 래퍼 컴포넌트.
- * (기존 코드와 동일)
+ * 설명: 스크롤 애니메이션을 적용할 요소를 감싸는 래퍼 컴포넌트 (globals.css 스타일 사용)
  */
-const AnimatedElement: React.FC<AnimatedElementProps> = ({ children, delay = 'delay-0' }) => {
+const AnimatedElement: React.FC<AnimatedElementProps> = ({ children, delay = '' }) => {
     const [ref, isVisible] = useIntersectionObserver({
         root: null,
         rootMargin: '0px',
@@ -97,7 +95,7 @@ const AnimatedElement: React.FC<AnimatedElementProps> = ({ children, delay = 'de
     return (
         <div
             ref={ref}
-            className={`transition-all duration-700 ease-out ${delay} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`scroll-animate ${isVisible ? 'is-visible' : ''} ${delay}`}
         >
             {children}
         </div>
@@ -109,7 +107,6 @@ const AnimatedElement: React.FC<AnimatedElementProps> = ({ children, delay = 'de
 
 /**
  * ID: FR-3 (서비스 소개 섹션)의 개별 카드 컴포넌트
- * (기존 코드와 동일)
  */
 const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 shadow-lg border border-white border-opacity-20 h-full">
@@ -122,20 +119,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
 );
 
 /**
- * ID: FR-2 (메인 히어로 섹션) + Gemini API 연동
+ * ID: FR-2 (메인 히어로 섹션) + Gemini API 연동 + globals.css 애니메이션 적용
  * 설명: 제품/서비스에 대한 간단한 설명을 입력하면 Gemini API가 매력적인 헤드라인과 부연 설명을 생성합니다.
  */
 const HeroSection: React.FC<HeroSectionProps> = ({ productInfo, setProductInfo }) => {
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const [headline, setHeadline] = useState<string>("당신의 아이디어를 위한\n최상의 시작점");
     const [subheadline, setSubheadline] = useState<string>('Project "Velocity"는 최신 기술 스택과 아름다운 애니메이션으로 무장한 랜딩 페이지 템플릿입니다. 이제 비즈니스 로직에만 집중하세요.');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setIsLoaded(true), 100);
-        return () => clearTimeout(timer);
-    }, []);
 
     // Gemini API를 호출하여 헤드라인과 부연 설명을 생성하는 함수
     const generateHeadline = async (): Promise<void> => {
@@ -206,7 +197,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ productInfo, setProductInfo }
             </div>
 
             <div className="relative z-10 max-w-4xl mx-auto w-full">
-                <div className={`transition-all duration-1000 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'}`}>
+                {/* globals.css의 fadeIn 애니메이션 적용 */}
+                <div className="animate-fade-in-down">
                     <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4 whitespace-pre-line">
                         {headline.split('\n').map((line, index) => (
                             <React.Fragment key={index}>
@@ -220,8 +212,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ productInfo, setProductInfo }
                     </p>
                 </div>
                 
-                {/* Gemini API 연동 UI */}
-                <div className={`bg-white bg-opacity-10 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white border-opacity-20 transition-all duration-1000 ease-out delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                {/* Gemini API 연동 UI - globals.css의 fadeInUp 애니메이션 적용 */}
+                <div className="bg-white bg-opacity-10 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white border-opacity-20 animate-fade-in-up">
                     <label htmlFor="productInfo" className="block text-lg font-semibold text-white mb-2">
                         어떤 제품이나 서비스를 위한 랜딩페이지인가요?
                     </label>
@@ -254,7 +246,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ productInfo, setProductInfo }
 };
 
 /**
- * ID: FR-3 (서비스 소개 섹션) + Gemini API 연동
+ * ID: FR-3 (서비스 소개 섹션) + Gemini API 연동 + 스크롤 애니메이션 적용
  * 설명: 제품/서비스 설명을 바탕으로 Gemini API가 핵심 기능 3가지를 자동으로 생성합니다.
  */
 const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
@@ -340,6 +332,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
     return (
         <section className="py-20 sm:py-32 bg-gray-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* 제목 섹션에 스크롤 애니메이션 적용 */}
                 <AnimatedElement>
                     <div className="text-center">
                         <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">왜 "Velocity"를 선택해야 할까요?</h2>
@@ -349,6 +342,8 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
                     </div>
                 </AnimatedElement>
 
+                {/* 버튼에 스크롤 애니메이션 적용 */}
+                <AnimatedElement delay="transition-delay-200">
                 <div className="text-center my-12">
                      <button 
                         onClick={generateFeatures}
@@ -365,10 +360,12 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
                     </button>
                     {error && <p className="text-red-400 mt-2">{error}</p>}
                 </div>
+                </AnimatedElement>
 
+                {/* 기능 카드들에 스크롤 애니메이션 적용 */}
                 <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {features.map((feature, index) => (
-                        <AnimatedElement key={index} delay={`delay-${index * 200}`}>
+                        <AnimatedElement key={index} delay={`transition-delay-${(index + 1) * 150}`}>
                             <FeatureCard {...feature} />
                         </AnimatedElement>
                     ))}
@@ -380,16 +377,17 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ productInfo }) => {
 
 /**
  * ID: FR-6 (푸터 섹션)
- * (기존 코드와 동일)
  */
 const Footer: React.FC = () => {
     return (
         <footer className="bg-gray-900 border-t border-gray-800">
+            <AnimatedElement>
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
                 <p className="text-gray-500">
                     &copy; {new Date().getFullYear()} Project "Velocity". All rights reserved.
                 </p>
             </div>
+            </AnimatedElement>
         </footer>
     );
 };
